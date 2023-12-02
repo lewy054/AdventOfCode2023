@@ -2,7 +2,7 @@
 
 public class Record
 {
-    public int RedQuantity { get; init; }
-    public int BlueQuantity { get; init; }
-    public int GreenQuantity { get; init; }
+    public int RedQuantity { get; set; }
+    public int BlueQuantity { get; set; }
+    public int GreenQuantity { get; set; }
 }

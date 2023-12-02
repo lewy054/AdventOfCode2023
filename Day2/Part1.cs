@@ -15,24 +15,30 @@ public class Part1
     private Record BagLoad { get; }
     private static int IdIndex => 5;
     private static char GameStartChar => ':';
+    private const string GamesSeparator = "; ";
 
-    public int GetResult()
+    public virtual int GetResult()
     {
         var input = FileHelpers.GetFileContent(Filename);
+        var records = GetRecords(input);
+        var possibleGames = DetermineWhichRecordsArePossible(records);
+        var result = possibleGames.Sum(e => e.Key);
+        return result;
+    }
+
+    protected static Dictionary<int, List<Record>> GetRecords(IEnumerable<string> input)
+    {
         var records = new Dictionary<int, List<Record>>();
-        const string gamesSeparator = "; ";
         foreach (var record in input)
         {
             var idString = string.Concat(record.Skip(IdIndex - 1).TakeWhile(e => e != GameStartChar));
             var id = int.Parse(idString ?? throw new InvalidOperationException(nameof(idString)));
-            var gamesInOneRecord = record.Split(gamesSeparator);
+            var gamesInOneRecord = record.Split(GamesSeparator);
             var recordResult = GetColorsOccurenceInOneRecord(gamesInOneRecord);
             records.Add(id, recordResult);
         }
 
-        var possibleGames = DetermineWhichRecordsArePossible(records);
-        var result = possibleGames.Sum(e => e.Key);
-        return result;
+        return records;
     }
 
     private static List<Record> GetColorsOccurenceInOneRecord(IEnumerable<string> games)
@@ -76,6 +82,7 @@ public class Part1
                 result.Add(record.Key, record.Value);
             }
         }
+
         return result;
     }
 }
