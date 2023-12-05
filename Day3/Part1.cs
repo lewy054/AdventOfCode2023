@@ -4,89 +4,33 @@ using Helpers;
 
 namespace Day3;
 
-public class Part1 : IResolver
+public partial class Part1 : IResolver
 {
     public Part1(IList<string> input)
     {
         Input = input;
     }
-    
+
     public IList<string> Input { get; init; }
 
     public int GetResult()
     {
         var symbolPositions = GetSymbolsPosition().ToList();
-        var numbers = new AdjacentNumberList();
+        var numbers = new ValidatedList();
         foreach (var symbolPosition in symbolPositions)
         {
-            //top
-            var topLeftNumber = GetNumberFromSide(symbolPosition.Y - 1, symbolPosition.X, SideToSearch.Left);
-            var topRightNumber = GetNumberFromSide(symbolPosition.Y - 1, symbolPosition.X, SideToSearch.Right);
+            var topNumbers = GetNumbersFromTopAndBottom(symbolPosition.Y, symbolPosition.X, SideToSearch.Up);
+            numbers.AddRange(topNumbers.Numbers);
 
-            var topLine = Input.ElementAt(symbolPosition.Y - 1);
-
-            var topMiddleChar = topLine.ElementAt(symbolPosition.X);
-
-            if (char.IsDigit(topMiddleChar))
-            {
-                var topNumber = "";
-                if (!string.IsNullOrEmpty(topLeftNumber))
-                {
-                    topNumber += topLeftNumber;
-                }
-
-                topNumber += topMiddleChar;
-                RemoveDigitFromInput(symbolPosition.X, symbolPosition.Y - 1);
-                if (!string.IsNullOrEmpty(topRightNumber))
-                {
-                    topNumber += topRightNumber;
-                }
-
-                numbers.Add(topNumber);
-            }
-            else
-            {
-                numbers.Add(topLeftNumber);
-                numbers.Add(topRightNumber);
-            }
-
-            //middle
             var leftNumber = GetNumberFromSide(symbolPosition.Y, symbolPosition.X, SideToSearch.Left);
             numbers.Add(leftNumber);
             var rightNumber = GetNumberFromSide(symbolPosition.Y, symbolPosition.X, SideToSearch.Right);
             numbers.Add(rightNumber);
 
-
-            //bottom
-            var bottomLeftNumber = GetNumberFromSide(symbolPosition.Y + 1, symbolPosition.X, SideToSearch.Left);
-            var bottomRightNumber = GetNumberFromSide(symbolPosition.Y + 1, symbolPosition.X, SideToSearch.Right);
-
-            var bottomLine = Input.ElementAt(symbolPosition.Y + 1);
-            var bottomMiddleChar = bottomLine.ElementAt(symbolPosition.X);
-
-            if (char.IsDigit(bottomMiddleChar))
-            {
-                var bottomNumber = "";
-                if (!string.IsNullOrEmpty(bottomLeftNumber))
-                {
-                    bottomNumber += bottomLeftNumber;
-                }
-
-                bottomNumber += bottomMiddleChar;
-                RemoveDigitFromInput(symbolPosition.X, symbolPosition.Y + 1);
-                if (!string.IsNullOrEmpty(bottomRightNumber))
-                {
-                    bottomNumber += bottomRightNumber;
-                }
-                numbers.Add(bottomNumber);
-            }
-            else
-            {
-                numbers.Add(bottomLeftNumber);
-                numbers.Add(bottomRightNumber);
-            }
+            var bottomNumbers = GetNumbersFromTopAndBottom(symbolPosition.Y, symbolPosition.X, SideToSearch.Bottom);
+            numbers.AddRange(bottomNumbers.Numbers);
         }
-        
+
         return numbers.Numbers.Sum();
     }
 
@@ -115,11 +59,45 @@ public class Part1 : IResolver
         return number;
     }
 
+    private ValidatedList GetNumbersFromTopAndBottom(int y, int x, SideToSearch sideToSearch)
+    {
+        var nextY = y;
+        switch (sideToSearch)
+        {
+            case SideToSearch.Bottom:
+                nextY += 1;
+                break;
+            case SideToSearch.Up:
+                nextY -= 1;
+                break;
+            case SideToSearch.Left:
+            case SideToSearch.Right:
+            default:
+                throw new InvalidDataException();
+        }
+
+        var leftNumber = GetNumberFromSide(nextY, x, SideToSearch.Left);
+        var rightNumber = GetNumberFromSide(nextY, x, SideToSearch.Right);
+        var middleChar = Input.ElementAt(nextY).ElementAt(x);
+
+        var foundNumbers = new ValidatedList();
+        if (!char.IsDigit(middleChar))
+        {
+            foundNumbers.Add(leftNumber);
+            foundNumbers.Add(rightNumber);
+            return foundNumbers;
+        }
+
+        RemoveDigitFromInput(x, nextY);
+        var number = leftNumber + middleChar + rightNumber;
+        foundNumbers.Add(number);
+        return foundNumbers;
+    }
+
     private void RemoveDigitFromInput(int x, int y)
     {
         var aStringBuilder = new StringBuilder(Input.ElementAt(y));
-        aStringBuilder.Remove(x, 1);
-        aStringBuilder.Insert(x, ".");
+        aStringBuilder.Remove(x, 1).Insert(x, ".");
         Input[y] = aStringBuilder.ToString();
     }
 
@@ -139,11 +117,5 @@ public class Part1 : IResolver
         }
 
         return result;
-    }
-
-    private enum SideToSearch
-    {
-        Left,
-        Right
     }
 }
