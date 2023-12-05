@@ -13,8 +13,11 @@
       </None>
     </ItemGroup>
 
+
     <ItemGroup>
-      <ProjectReference Include="..\Helpers\Helpers.csproj" />
+      <Reference Include="Helpers">
+        <HintPath>..\Day4\bin\Debug\net6.0\Helpers.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
