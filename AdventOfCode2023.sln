@@ -8,7 +8,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day3", "Day3\Day3.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day4", "Day4\Day4.csproj", "{3E652153-F987-43C4-BC54-20DD6979943F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{6FF4B2AF-798C-4C2B-A4E9-15685FC16122}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{59F85B36-0520-4989-B049-33DEA3EB9D8D}"
+	ProjectSection(SolutionItems) = preProject
+		Helpers\FileHelpers.cs = Helpers\FileHelpers.cs
+		Helpers\IResolver.cs = Helpers\IResolver.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,13 +36,5 @@ Global
 		{3E652153-F987-43C4-BC54-20DD6979943F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E652153-F987-43C4-BC54-20DD6979943F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E652153-F987-43C4-BC54-20DD6979943F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D3245D6-6E2D-4DCB-B7A1-C8776A38C698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D3245D6-6E2D-4DCB-B7A1-C8776A38C698}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D3245D6-6E2D-4DCB-B7A1-C8776A38C698}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D3245D6-6E2D-4DCB-B7A1-C8776A38C698}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FF4B2AF-798C-4C2B-A4E9-15685FC16122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6FF4B2AF-798C-4C2B-A4E9-15685FC16122}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6FF4B2AF-798C-4C2B-A4E9-15685FC16122}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6FF4B2AF-798C-4C2B-A4E9-15685FC16122}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
