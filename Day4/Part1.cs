@@ -3,26 +3,23 @@ using Helpers;
 
 namespace Day4;
 
-public class Part1
+public class Part1 : IResolver
 {
-    public Part1(string fileName)
+    public Part1(IEnumerable<string> input)
     {
-        FileName = fileName;
+        Input = input;
     }
 
-    public string FileName { get; set; }
     private IEnumerable<string> Input { get; set; }
 
-    public int GetResult()
+    public virtual int GetResult()
     {
-        Input = FileHelpers.GetFileContent(FileName).ToList();
         var cards = GetCards();
         var points = 0;
         foreach (var card in cards)
         {
-            var allNumbersWithoutDuplicates = card.Numbers.Concat(card.WinningNumbers).Distinct().ToList();
-            var totalCount = card.Numbers.Count + card.WinningNumbers.Count;
-            var howManyWins = totalCount - allNumbersWithoutDuplicates.Count;
+            var howManyWins = GetHowManyWiningNumbers(card);
+
             if (howManyWins == 0)
             {
                 continue;
@@ -36,7 +33,7 @@ public class Part1
         return points;
     }
 
-    private IEnumerable<Card> GetCards()
+    protected IEnumerable<Card> GetCards()
     {
         var cards = new List<Card>();
 
@@ -51,5 +48,13 @@ public class Part1
         }
 
         return cards;
+    }
+
+    protected static int GetHowManyWiningNumbers(Card card)
+    {
+        var allNumbersWithoutDuplicates = card.Numbers.Concat(card.WinningNumbers).Distinct().ToList();
+        var totalCount = card.Numbers.Count + card.WinningNumbers.Count;
+        var howManyWins = totalCount - allNumbersWithoutDuplicates.Count;
+        return howManyWins;
     }
 }
