@@ -5,12 +5,13 @@ namespace Day4;
 
 public class Part1 : IResolver
 {
-    public Part1(IEnumerable<string> input)
+    public Part1(IList<string> input)
     {
         Input = input;
     }
 
-    private IEnumerable<string> Input { get; set; }
+
+    public IList<string> Input { get; init; }
 
     public virtual int GetResult()
     {

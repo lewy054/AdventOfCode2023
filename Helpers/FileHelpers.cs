@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-
-namespace Helpers;
+﻿namespace Helpers;
 
 public static class FileHelpers
 {
