@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Helpers;
 
 namespace Day3;
@@ -9,8 +10,7 @@ public class Part1 : IResolver
     {
         Input = input;
     }
-
-
+    
     public IList<string> Input { get; init; }
 
     public int GetResult()
@@ -30,19 +30,19 @@ public class Part1 : IResolver
             if (char.IsDigit(topMiddleChar))
             {
                 var topNumber = "";
-                if (topLeftNumber != -1)
+                if (!string.IsNullOrEmpty(topLeftNumber))
                 {
                     topNumber += topLeftNumber;
                 }
 
                 topNumber += topMiddleChar;
                 RemoveDigitFromInput(symbolPosition.X, symbolPosition.Y - 1);
-                if (topRightNumber != -1)
+                if (!string.IsNullOrEmpty(topRightNumber))
                 {
                     topNumber += topRightNumber;
                 }
 
-                numbers.Add(int.Parse(topNumber));
+                numbers.Add(topNumber);
             }
             else
             {
@@ -67,19 +67,18 @@ public class Part1 : IResolver
             if (char.IsDigit(bottomMiddleChar))
             {
                 var bottomNumber = "";
-                if (bottomLeftNumber != -1)
+                if (!string.IsNullOrEmpty(bottomLeftNumber))
                 {
                     bottomNumber += bottomLeftNumber;
                 }
 
                 bottomNumber += bottomMiddleChar;
                 RemoveDigitFromInput(symbolPosition.X, symbolPosition.Y + 1);
-                if (bottomRightNumber != -1)
+                if (!string.IsNullOrEmpty(bottomRightNumber))
                 {
                     bottomNumber += bottomRightNumber;
                 }
-
-                numbers.Add(int.Parse(bottomNumber));
+                numbers.Add(bottomNumber);
             }
             else
             {
@@ -87,19 +86,11 @@ public class Part1 : IResolver
                 numbers.Add(bottomRightNumber);
             }
         }
-
-        foreach (var num in numbers.Numbers)
-        {
-            if (num <= 0)
-            {
-                Console.Write("przegr");
-            }
-        }
-
+        
         return numbers.Numbers.Sum();
     }
 
-    private int GetNumberFromSide(int y, int x, SideToSearch sideToSearch)
+    private string GetNumberFromSide(int y, int x, SideToSearch sideToSearch)
     {
         var number = "";
         var nextX = x;
@@ -121,8 +112,7 @@ public class Part1 : IResolver
             number = string.Concat(number.Reverse());
         }
 
-        var isNumber = int.TryParse(number, out var num);
-        return isNumber ? num : -1;
+        return number;
     }
 
     private void RemoveDigitFromInput(int x, int y)

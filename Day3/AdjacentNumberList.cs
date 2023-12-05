@@ -3,12 +3,12 @@
 public class AdjacentNumberList
 {
     public List<int> Numbers { get; private set; } = new();
-    
-    public void Add(int number)
+    public void Add(string number)
     {
-        if (number != -1)
+        if (number != "")
         {
-            Numbers.Add(number);
+            Console.WriteLine($"Adding:{number}");
+            Numbers.Add(int.Parse(number));
         }
     }
 }
