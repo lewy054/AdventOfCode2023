@@ -16,7 +16,6 @@ public class ValidatedList
     {
         foreach (var number in numbers.Where(number => number != -1))
         {
-            Console.WriteLine($"Adding:{number}");
             Numbers.Add(number);
         }
     }

@@ -6,9 +6,7 @@ public class Part2 : Part1
     {
         Input = input;
     }
-
-    public IEnumerable<string> Input { get; set; }
-
+    
     public override int GetResult()
     {
         var cards = GetCards().ToList();
