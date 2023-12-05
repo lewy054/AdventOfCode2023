@@ -8,8 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day4", "Day4\Day4.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{59F85B36-0520-4989-B049-33DEA3EB9D8D}"
 	ProjectSection(SolutionItems) = preProject
-		FileHelpers.cs = FileHelpers.cs
-		IResolver.cs = IResolver.cs
+		Helpers\FileHelpers.cs = Helpers\FileHelpers.cs
+		Helpers\IResolver.cs = Helpers\IResolver.cs
 	EndProjectSection
 EndProject
 Global
