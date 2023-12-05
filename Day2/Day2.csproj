@@ -14,9 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Helpers">
-        <HintPath>..\Day4\bin\Debug\net6.0\Helpers.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\Helpers\Helpers.csproj" />
     </ItemGroup>
-
+    
 </Project>

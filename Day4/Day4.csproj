@@ -12,11 +12,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
-
+    
     <ItemGroup>
-      <Reference Include="Helpers">
-        <HintPath>bin\Debug\net6.0\Helpers.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\Helpers\Helpers.csproj" />
     </ItemGroup>
-
+    
 </Project>
