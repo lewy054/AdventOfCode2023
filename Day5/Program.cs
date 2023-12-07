@@ -5,11 +5,39 @@ using Helpers;
 
 const string filename = "input.txt";
 var input = FileHelpers.GetFileContent(filename).ToList();
-var part1 = new Part1(input);
+var almanac = new Almanac(input);
 
-var part1Result = part1.GetResult();
-Console.WriteLine($"Results of Day5, Part1 : {part1Result}");
+var locations = almanac.GetLocations();
+var minLocationPart1 = locations.Min();
+Console.WriteLine($"Results of Day5, Part1 : {minLocationPart1}");
 
-// var part2 = new Part2(input);
-// var part2Result = part2.GetResult();
-// Console.WriteLine($"Results of Day5, Part2 : {part2Result}");
+var seeds = almanac.Seeds;
+var minLocation = long.MaxValue;
+Parallel.ForEach(SteppedIterator(0, almanac.Seeds.Count, 2), (i) =>
+{
+    var maxRange = almanac.Seeds[i] + almanac.Seeds[i + 1] - 1;
+    Console.WriteLine($"{i}: Range start: {almanac.Seeds[i]}, Range end: {maxRange}");
+    for (var seed = almanac.Seeds[i]; seed <= maxRange; seed++)
+    {
+        var location = almanac.GetSeedLocation(seed);
+        if (location < minLocation)
+        {
+            minLocation = location;
+            Console.WriteLine($"Found new min: {minLocation}");
+        }
+    }
+
+    Console.WriteLine($"end: {i}");
+});
+
+
+static IEnumerable<int> SteppedIterator(int startIndex, int endIndex, int stepSize)
+{
+    for (int i = startIndex; i < endIndex; i = i + stepSize)
+    {
+        yield return i;
+    }
+}
+
+
+Console.WriteLine($"Results of Day5, Part2 : {minLocation}");

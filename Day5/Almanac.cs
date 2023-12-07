@@ -38,7 +38,6 @@ public class Almanac
         LightToTemperature = categories[4];
         TemperatureToHumidity = categories[5];
         HumidityToLocation = categories[6];
-
     }
 
     private IEnumerable<List<Map>> GetCategories()
@@ -61,5 +60,29 @@ public class Almanac
 
             yield return maps;
         }
+    }
+
+    public IEnumerable<long> GetLocations()
+    {
+        var locations = new List<long>();
+        foreach (var seed in Seeds)
+        {
+            var location = GetSeedLocation(seed);
+            locations.Add(location);
+        }
+
+        return locations;
+    }
+
+    public long GetSeedLocation(long seed)
+    {
+        var soil = SeedToSoil.GetDestinationValue(seed);
+        var fertilizer = SoilToFertilizer.GetDestinationValue(soil);
+        var water = FertilizerToWater.GetDestinationValue(fertilizer);
+        var light = WaterToLight.GetDestinationValue(water);
+        var temperature = LightToTemperature.GetDestinationValue(light);
+        var humidity = TemperatureToHumidity.GetDestinationValue(temperature);
+        var location = HumidityToLocation.GetDestinationValue(humidity);
+        return location;
     }
 }
