@@ -5,11 +5,18 @@ using Helpers;
 
 const string filename = "input.txt";
 var input = FileHelpers.GetFileContent(filename).ToList();
-var part1 = new Part1(input);
+var almanac = new Almanac(input);
 
-var part1Result = part1.GetResult();
-Console.WriteLine($"Results of Day5, Part1 : {part1Result}");
+var location = almanac.Seeds.Select(almanac.FindLocationForSeed).Min();
+Console.WriteLine($"Results of Day5, Part1 : {location}");
 
-// var part2 = new Part2(input);
-// var part2Result = part2.GetResult();
-// Console.WriteLine($"Results of Day5, Part2 : {part2Result}");
+var maxRange = almanac.GetSeedMaxRange();
+for (var minLocation = 0; minLocation < maxRange; minLocation++)
+{
+    var seed = almanac.FindSeedForLocation(minLocation);
+    if (almanac.SeedExists(seed))
+    {
+        Console.WriteLine($"Results of Day5, Part2 : {minLocation}");
+        break;
+    }
+}
