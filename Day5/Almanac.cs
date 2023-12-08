@@ -14,6 +14,7 @@ public class Almanac
     private List<string> Input { get; set; }
 
     public List<long> Seeds { get; private set; } = new();
+    public List<(long start, long end)> SeedsRange { get; private set; } = new();
     public List<Map> SeedToSoil { get; private set; } = new();
     public List<Map> SoilToFertilizer { get; private set; } = new();
     public List<Map> FertilizerToWater { get; private set; } = new();
@@ -26,8 +27,12 @@ public class Almanac
     private void SetSeeds()
     {
         Seeds = Regex.Matches(Input.First(), @"\d+").Select(e => long.Parse(e.Value)).ToList();
+        for (var i = 0; i < Seeds.Count; i += 2)
+        {
+            SeedsRange.Add((Seeds[i], Seeds[i] + Seeds[i + 1]));
+        }
     }
-
+    
     private void SetCategories()
     {
         var categories = GetCategories().ToList();
@@ -61,20 +66,13 @@ public class Almanac
             yield return maps;
         }
     }
-
-    public IEnumerable<long> GetLocations()
+    
+    public bool SeedExists(long seed)
     {
-        var locations = new List<long>();
-        foreach (var seed in Seeds)
-        {
-            var location = GetSeedLocation(seed);
-            locations.Add(location);
-        }
-
-        return locations;
+        return SeedsRange.Any(e => e.start <= seed && e.end >= seed);
     }
-
-    public long GetSeedLocation(long seed)
+    
+    public long FindLocationForSeed(long seed)
     {
         var soil = SeedToSoil.GetDestinationValue(seed);
         var fertilizer = SoilToFertilizer.GetDestinationValue(soil);
@@ -84,5 +82,32 @@ public class Almanac
         var humidity = TemperatureToHumidity.GetDestinationValue(temperature);
         var location = HumidityToLocation.GetDestinationValue(humidity);
         return location;
+    }
+
+    public long FindSeedForLocation(long location)
+    {
+        var humidity = HumidityToLocation.GetSourceValue(location);
+        var temperature = TemperatureToHumidity.GetSourceValue(humidity);
+        var light = LightToTemperature.GetSourceValue(temperature);
+        var water = WaterToLight.GetSourceValue(light);
+        var fertilizer = FertilizerToWater.GetSourceValue(water);
+        var soil = SoilToFertilizer.GetSourceValue(fertilizer);
+        var seed = SeedToSoil.GetSourceValue(soil);
+        return seed;
+    }
+
+    public long GetSeedMaxRange()
+    {
+        long maxRange = 0;
+        for (var i = 0; i < Seeds.Count; i+=2)
+        {
+            var setRange = Seeds[i] + Seeds[i + 1];
+            if (setRange > maxRange)
+            {
+                maxRange = setRange;
+            }
+        }
+
+        return maxRange;
     }
 }
