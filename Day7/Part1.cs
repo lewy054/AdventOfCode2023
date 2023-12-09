@@ -8,6 +8,7 @@ public class Part1
     }
 
     private List<(string hand, int bid)> Input { get; set; }
+    protected virtual string GetCardsRanking => "AKQJT98765432";
 
     public int GetTotalWinnings()
     {
@@ -26,12 +27,48 @@ public class Part1
         }
 
         var sorted = hands
-            .OrderBy(e => (e.hand, e.strong), new Extensions.CustomSorter()).ToList();
+            .OrderBy(e => (e.hand, e.strong, GetCardsRanking), new Extensions.CustomSorter()).ToList();
         var result = sorted.Select(e => new Tuple<string, int>(e.hand, e.bid)).ToList();
         return result;
     }
 
-    private static int GetHandStrength(string hand)
+    private int GetHandStrength(string hand)
+    {
+        var handSymbols = GetHandSymbols(hand);
+        int typeStrong;
+        if (handSymbols.Any(e => e.Length == 5))
+        {
+            typeStrong = (int)TypeStrong.FiveOfKind;
+        }
+        else if (handSymbols.Any(e => e.Length == 4))
+        {
+            typeStrong = (int)TypeStrong.FourOfKind;
+        }
+        else if (handSymbols.Count == 2 && handSymbols.ElementAt(0).Length + handSymbols.ElementAt(1).Length == 5)
+        {
+            typeStrong = (int)TypeStrong.FullHouse;
+        }
+        else if (handSymbols.Any(e => e.Length == 3))
+        {
+            typeStrong = (int)TypeStrong.ThreeOfKind;
+        }
+        else if (handSymbols.Count == 2)
+        {
+            typeStrong = (int)TypeStrong.TwoPair;
+        }
+        else if (handSymbols.Count == 1)
+        {
+            typeStrong = (int)TypeStrong.OnePair;
+        }
+        else
+        {
+            typeStrong = (int)TypeStrong.HighCard;
+        }
+
+        return typeStrong;
+    }
+
+    protected virtual List<string> GetHandSymbols(string hand)
     {
         var nonDistinctItems =
             from list in hand.ToArray()
@@ -39,23 +76,12 @@ public class Part1
             into grouped
             where grouped.Count() > 1
             select string.Concat(grouped).ToList();
-        var nonDistinctItemsList = nonDistinctItems.ToList();
-        var typeStrong = nonDistinctItemsList.Count switch
-        {
-            1 when nonDistinctItemsList.ElementAt(0).Count == 5 => (int)TypeStrong.FiveOfKind,
-            1 when nonDistinctItemsList.ElementAt(0).Count == 4 => (int)TypeStrong.FourOfKind,
-            2 when nonDistinctItemsList.ElementAt(0).Count + nonDistinctItemsList.ElementAt(1).Count == 5 =>
-                (int)TypeStrong.FullHouse,
-            1 when nonDistinctItemsList.ElementAt(0).Count == 3 => (int)TypeStrong.ThreeOfKind,
-            2 => (int)TypeStrong.TwoPair,
-            1 => (int)TypeStrong.OnePair,
-            _ => (int)TypeStrong.HighCard
-        };
-
-        return typeStrong;
+        var nonDistinctItemsList = nonDistinctItems.Select(e => string.Concat(e)).ToList();
+        return nonDistinctItemsList;
     }
+    
 
-    enum TypeStrong
+    private enum TypeStrong
     {
         HighCard,
         OnePair,

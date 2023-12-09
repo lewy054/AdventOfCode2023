@@ -16,3 +16,8 @@ var part1Result = part1.GetTotalWinnings();
 
 Console.WriteLine($"Result of Day7, Part1: {part1Result}");
 
+var part2 = new Part2(pairs);
+var part2Result = part2.GetTotalWinnings();
+
+Console.WriteLine($"Result of Day7, Part2: {part2Result}");
+
