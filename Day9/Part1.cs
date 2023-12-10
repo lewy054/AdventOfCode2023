@@ -4,15 +4,15 @@ public class Part1
 {
     public Part1(List<string> input)
     {
-        Input = input;
+        GetInput = input;
     }
 
-    private List<string> Input { get; }
+    protected virtual List<string> GetInput { get; }
 
     public int GetResult()
     {
         var extrapolatedHistoriesSum = 0;
-        foreach (var history in Input)
+        foreach (var history in GetInput)
         {
             var histories = new List<List<int>>();
             var values = history.Split(" ").Select(int.Parse).ToList();
